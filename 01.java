@@ -1,78 +1,104 @@
-class Student{
-	
-		private String name;
-		private int exam1;
-		private int exam2;
-		private int exam3;
-		
+class Car {
+    private String plateNumber;
+    private String owner;
+    private int parkedHours;
 
-		String getName(){
-			return name;
-		}
-		
-		boolean validateMarks(int marks)throws Exception{
-		if(marks>0 && marks<=100){
-			return true;
-		}
-		else{
+    Car(String plate, String ownerName, int hours) {
+        plateNumber = plate;
+        owner = ownerName;
+        parkedHours = hours;
+    }
 
-			return false;
-			
-		}
-	}
-	
-	Student (String name,int e1, int e2, int e3)throws Exception{
-		this.name=name;
-			
-		if(validateMarks(e1)&& validateMarks(e2)&& validateMarks(e3)){
-			exam1=e1;
-			exam2=e2;
-			exam3=e3;
-		}
-		else{
-				System.out.println("Exam Scores must be Between 0 to 100");
-				throw new Exception ("Notice is Invalid!!!");
-			}
-		}
-		
-		
-		int getExam1(){
-			return exam1;
-		}
-		
-		int getExam2(){
-			return exam2;
-		}
-		
-		int getExam3(){
-			return exam3;
-		}
-		
-	double CalculateAverage(){
-		double avg;
-		avg=(exam1+exam2+exam3)/3;
-		return avg;
-	}
-		
-	
-}
-class CalculateAvg{
-	public static void main(String[] args){
-	
+    String getPlateNumber() {
+        return plateNumber;
+    }
 
-	try {
-		Student s1=new Student("John",75,110,90);
-		Student s2=new Student("jw",75,100,90);
-		Student s3=new Student("JD",7,100,90);
-		System.out.println("Student "+s1.getName()+" Average is "+s1.CalculateAverage());
-		System.out.println("Student "+s2.getName()+" Average is "+s2.CalculateAverage());
-		System.out.println("Student "+s3.getName()+" Average is "+s3.CalculateAverage());
-		}
-		catch(Exception e){
-			System.out.println("Notice is Invalid!!!");
-			System.out.println("The Error is "+e.getMessage());
-		}
-		
-	}
+    void setPlateNumber(String plateNumber) {
+        this.plateNumber = plateNumber;
+    }
+
+    String getOwner() {
+        return owner;
+    }
+
+    void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    int getParkedHours() {
+        return parkedHours;
+    }
+
+    void setParkedHours(int parkedHours) {
+        this.parkedHours = parkedHours;
+    }
+
+    void showInfo() {
+        System.out.println("Plate Number: " + plateNumber + ", Owner: " + owner + ", Parked Hours: " + parkedHours);
+    }
 }
 
+class ParkingGarage {
+    private Car[] parkedCars;
+    private int carCount;
+
+    ParkingGarage() {
+        parkedCars = new Car[5];
+        carCount = 0;
+    }
+
+    void addCar(Car car) {
+        if (carCount < 5) {
+            parkedCars[carCount] = car;
+            carCount++;
+            System.out.println("Car added: " + car.getPlateNumber());
+        } else {
+            System.out.println("Garage is full. Can't add car: " + car.getPlateNumber());
+        }
+    }
+
+    void removeCar(String plateNumber) {
+        int index = -1;
+        for (int i = 0; i < carCount; i++) {
+            if (parkedCars[i].getPlateNumber().equalsIgnoreCase(plateNumber)) {
+                index = i;
+                break;
+            }
+        }
+        if (index == -1) {
+            System.out.println("Car with plate number " + plateNumber + " not found.");
+            return;
+        }
+        for (int i = index; i < carCount - 1; i++) {
+            parkedCars[i] = parkedCars[i + 1];
+        }
+        parkedCars[carCount - 1] = null;
+        carCount--;
+        System.out.println("Car with plate number " + plateNumber + " removed");
+    }
+
+    void showAllCars() {
+        if (carCount == 0) {
+            System.out.println("Garage is empty");
+            return;
+        }
+        System.out.println("Parked Cars: ");
+        for (int i = 0; i < carCount; i++) {
+            parkedCars[i].showInfo();
+        }
+    }
+}
+
+class Main {
+    public static void main(String[] args) {
+        ParkingGarage garage = new ParkingGarage();
+
+        garage.addCar(new Car("ABC123", "John ", 2));
+        garage.addCar(new Car("XYZ789", "Smith", 4));
+        garage.addCar(new Car("LMN456", "Bob", 1));
+
+        garage.removeCar("ABC123");
+
+        garage.showAllCars();
+    }
+}
